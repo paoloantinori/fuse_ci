@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="sample">
+    <repository>mvn:org.apache.camel.karaf/apache-camel/${camel.version}/xml/features</repository>
+    <repository>mvn:org.apache.activemq/activemq-karaf/${activemq.version}/xml/features</repository>
+    <repository>mvn:org.apache.karaf.assemblies.features/enterprise/${karaf.version}/xml/features</repository>
+    <repository>mvn:org.apache.karaf.assemblies.features/standard/${karaf.version}/xml/features</repository>
+    <repository>mvn:org.fusesource.fabric/fuse-fabric/${fuse-esb.version}/xml/features</repository>
+    <repository>mvn:org.apache.cxf.karaf/apache-cxf/${cxf.version}/xml/features</repository>
+    <repository>mvn:io.hawt/hawtio-karaf/${hawtio.version}/xml/features</repository>
+
+    <feature name="all" resolver="(obr)" version="${features.all.version}">
+        <feature dependency="true" version="${features.module1.version}">module1</feature>
+        <feature dependency="true" version="${features.module2.version}">module2</feature>
+    </feature>
+
+    <feature name="module1" resolver="(obr)" version="${features.module1.version}">
+        <bundle>mvn:sample/module1/${module1.version}</bundle>
+    </feature>
+
+    <feature name="module2" version="${features.module1.version}">
+        <bundle>mvn:sample/module1/${module2.version}</bundle>
+   </feature>
+
+</features>

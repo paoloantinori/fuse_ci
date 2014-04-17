@@ -1,0 +1,3 @@
+source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/environment_constants
+
+fabric:container-create-child --resolver localip root worker1

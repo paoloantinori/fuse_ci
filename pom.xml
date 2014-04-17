@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>sample</groupId>
+    <artifactId>root</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Root Pom</name>
+    <!-- test -->
+    <properties>
+        <!-- features versions -->
+        <features.all.version>3.0</features.all.version>
+        <features.module1.version>1.0</features.module1.version>
+        <features.module2.version>2.0</features.module2.version>
+        <!-- artifacts versions -->
+        <karaf_scripts.version>1.0.0-SNAPSHOT</karaf_scripts.version>
+        <module1.version>2.0.0-SNAPSHOT</module1.version>
+        <module2.version>3.0.0-SNAPSHOT</module2.version>
+        <!-- external dependencies -->
+        <hawtio.version>1.3.1</hawtio.version>
+        <karaf.version>2.3.0.redhat-610379</karaf.version>
+        <activemq.version>5.9.0.redhat-610379</activemq.version>
+        <fuse-esb.version>7.2.0.redhat-024</fuse-esb.version>
+        <cxf.version>2.7.0.redhat-610379</cxf.version>
+        <jboss.fuse.version>6.1.0.redhat-379</jboss.fuse.version>
+        <camel.version>2.12.0.redhat-610379</camel.version>
+        <pax.web.version>3.0.6</pax.web.version>
+
+<!--         Fuse ESB 6.0
+        <hawtio.version>1.3.1</hawtio.version>
+        <karaf.version>2.3.0.redhat-60024</karaf.version>
+        <activemq.version>5.8.0.redhat-60024</activemq.version>
+        <fuse-esb.version>7.2.0.redhat-024</fuse-esb.version>
+        <cxf.version>2.6.0.redhat-60024</cxf.version>
+        <jboss.fuse.version>6.0.0.redhat-024</jboss.fuse.version>
+        <camel.version>2.10.0.redhat-60024</camel.version> -->
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+    <modules>
+        <module>module1</module>
+        <module>module2</module>
+        <module>ci</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    <repositories>
+        <repository>
+            <id>fusesource</id>
+            <url>http://repo.fusesource.com/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>fusesource.snapshot</id>
+            <url>http://repo.fusesource.com/maven2-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>apache-public</id>
+            <url>https://repository.apache.org/content/groups/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+</project>
