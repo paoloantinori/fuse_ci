@@ -57,6 +57,7 @@ docker run -d -t -i $EXPOSE_PORTS --name root fuse6.1
 
 # assign ip addresses to env variable, despite they should be constant on the same machine across sessions
 IP_ROOT=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' root)
+USERNAME_ROOT="fuse"
 
 ########### aliases to preconfigure ssh and scp verbose to type options
 
@@ -65,7 +66,7 @@ SSH_PATH=$(which ssh)
 ### ssh aliases to remove some of the visual clutter in the rest of the script
 # alias to connect to your docker images
 alias ssh="$SSH_PATH -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR"
-alias ssh2host="$SSH_PATH -o UserKnownHostsFile=/dev/null -o ConnectionAttempts=180 -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR fuse@$IP_ROOT"
+alias ssh2host="$SSH_PATH -o UserKnownHostsFile=/dev/null -o ConnectionAttempts=180 -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR $USERNAME_ROOT@$IP_ROOT"
 # alias to connect to the ssh server exposed by JBoss Fuse. uses sshpass to script the password authentication
 alias ssh2fabric="sshpass -p admin $SSH_PATH -p 8101 -o ServerAliveCountMax=100 -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR admin@$IP_ROOT"
 #alias for scp to inline flags to disable ssh warnings
@@ -96,10 +97,10 @@ ssh2fabric "fabric:create --clean -r localip -g localip --wait-for-provisioning"
 #ssh2fabric "stop org.jboss.amq.mq-fabric" 
 
 # upload release
-scp ../offline_maven_repo/target/offline_maven_repo-*.zip fuse@$IP_ROOT:/opt/rh/
+scp ../offline_maven_repo/target/offline_maven_repo-*.zip $USERNAME_ROOT@$IP_ROOT:/opt/rh/
 VERSION=$(ls -1 offline_maven_repo-* |  cut -d '-' -f 3- | sed 's/\.zip//' )
 # upload properties
-scp ../config/overridden_constants.properties fuse@$IP_ROOT:/opt/rh/
+scp ../config/overridden_constants.properties $USERNAME_ROOT@$IP_ROOT:/opt/rh/
 
 
 # extract the release
@@ -121,7 +122,7 @@ ssh2fabric "shell:source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/release_e
 set +x
 echo "
 ----------------------------------------------------
-Offline Maven Repo
+CI Quickstart
 ----------------------------------------------------
 FABRIC ROOT: 
 - ip:          $IP_ROOT

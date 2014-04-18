@@ -2,14 +2,14 @@ source mvn:sample/karaf_scripts/${karaf_scripts.version}/karaf/environment_const
 
 wait-for-service org.apache.karaf.features.FeaturesService
 
-fabric:version-create --default 1.1
+fabric:version-create --default ${profiles.default.version}
 
-fabric:profile-edit --repositories mvn:sample/features/3.0/xml/features default 1.1
-fabric:profile-edit --features module1 default 1.1
+fabric:profile-edit --repositories mvn:sample/features/3.0/xml/features default ${profiles.default.version}
+fabric:profile-edit --features module1 default ${profiles.default.version}
 
 ################
 ### Upgrade  ###
 ################
 
-fabric:container-upgrade 1.1 broker
-fabric:container-upgrade 1.1 worker1
+fabric:container-upgrade ${profiles.default.version} broker
+fabric:container-upgrade ${profiles.default.version} worker1

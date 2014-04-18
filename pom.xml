@@ -12,6 +12,8 @@
         <features.all.version>3.0</features.all.version>
         <features.module1.version>1.0</features.module1.version>
         <features.module2.version>2.0</features.module2.version>
+        <!-- fabric profiles versions -->
+        <profiles.default.version>1.1</profiles.default.version>
         <!-- artifacts versions -->
         <karaf_scripts.version>1.0.0-SNAPSHOT</karaf_scripts.version>
         <module1.version>2.0.0-SNAPSHOT</module1.version>
