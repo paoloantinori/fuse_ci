@@ -67,9 +67,7 @@ SSH_PATH=$(which ssh)
 alias ssh="$SSH_PATH -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR"
 alias ssh2host="$SSH_PATH -o UserKnownHostsFile=/dev/null -o ConnectionAttempts=180 -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR fuse@$IP_ROOT"
 # alias to connect to the ssh server exposed by JBoss Fuse. uses sshpass to script the password authentication
-alias ssh2fabric="sshpass -p admin $SSH_PATH -p 8101  -o ServerAliveInterval=15 -o TCPKeepAlive=yes -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR admin@$IP_ROOT"
-# alias to connect to the ssh server exposed by JBoss Fuse. uses sshpass to script the password authentication
-alias ssh2broker="sshpass -p admin $SSH_PATH -p 8101 -o ConnectionAttempts=180  -o ServerAliveInterval=15 -o TCPKeepAlive=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=DEBUG admin@$IP_BROKER"
+alias ssh2fabric="sshpass -p admin $SSH_PATH -p 8101 -o ServerAliveInterval=15 -o TCPKeepAlive=yes -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR admin@$IP_ROOT"
 #alias for scp to inline flags to disable ssh warnings
 alias scp="scp -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR"
 
@@ -77,6 +75,8 @@ alias scp="scp -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o Stri
 ################################################################################################
 #####                             Tutorial starts here                                     #####
 ################################################################################################
+
+OFFLINE_MAVEN_REPO_PATH="/opt/rh/offline_maven_repo"
 
 
 # start fuse on root node (yes, that initial backslash is required to not use the declared alias)
@@ -90,30 +90,28 @@ ssh2fabric "wait-for-service -t 300000 io.fabric8.zookeeper.bootstrap.BootstrapC
 
 
 # create a new fabric AND wait for the Fabric to be up and ready to accept the following commands
-ssh2fabric "fabric:create -b 0.0.0.0 --clean -r localip -g localip --wait-for-provisioning" 
+ssh2fabric "fabric:create --clean -r localip -g localip --wait-for-provisioning" 
 
 # stop default broker created automatically with fabric
-ssh2fabric "stop org.jboss.amq.mq-fabric" 
-
-
-
-# create broker profile and add location of shared message store
-BROKER_PROFILE_NAME="MyBroker"
-ssh2fabric "fabric:mq-create --profile $BROKER_PROFILE_NAME $BROKER_PROFILE_NAME"
-ssh2fabric "fabric:container-create-child --resolver localip --profile $BROKER_PROFILE_NAME root broker"
-
+#ssh2fabric "stop org.jboss.amq.mq-fabric" 
 
 # upload release
 scp ../offline_maven_repo/target/offline_maven_repo-*.zip fuse@$IP_ROOT:/opt/rh/
 VERSION=$(ls -1 offline_maven_repo-* |  cut -d '-' -f 3- | sed 's/\.zip//' )
+# upload properties
+scp ../config/overridden_constants.properties fuse@$IP_ROOT:/opt/rh/
+
 
 # extract the release
 ssh2host "unzip -u -o /opt/rh/*.zip -d /opt/rh"
 
 # configure local maven
-ssh2fabric 'fabric:profile-edit --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories="file:///opt/rh/offline_maven_repo@snapshots@id=sample" default'
+ssh2fabric "fabric:profile-edit --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"file://$OFFLINE_MAVEN_REPO_PATH@snapshots@id=sample\" default"
 # important! to disable maven snapshot checksum that otherwise will block the functionality
 ssh2fabric "fabric:profile-edit --pid org.fusesource.fabric.maven/checksumPolicy=warn  default "
+ssh2fabric "fabric:profile-edit --pid org.ops4j.pax.url.mvn/checksumPolicy=warn  default "
+
+
 
 ssh2fabric "shell:source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/create_containers"
 ssh2fabric "shell:source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/release_esb"
@@ -128,15 +126,11 @@ Offline Maven Repo
 FABRIC ROOT: 
 - ip:          $IP_ROOT
 - ssh:         ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null fuse@$IP_ROOT
-- karaf:       ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null admin@$IP_ROOT -p8101
+- karaf:       sshpass -p admin ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null admin@$IP_ROOT -p8101
 - tail logs:   ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null fuse@$IP_ROOT 'tail -F /opt/rh/jboss-fuse-*/data/log/fuse.log'
 
 NOTE: If you are using Docker in a VM you may need extra config to route the traffic to the containers. One way to bypass this can be setting the environment variable EXPOSE_PORTS=true before running this script and than to use 'docker ps' to discover the exposed ports on your localhost.
 ----------------------------------------------------
-Use command:
-
-cluster-list
-
 
 "
 

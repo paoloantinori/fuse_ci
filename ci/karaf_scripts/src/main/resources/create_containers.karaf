@@ -1,3 +1,9 @@
 source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/environment_constants
 
+# create broker profile
+fabric:mq-create --profile $BROKER_PROFILE_NAME $BROKER_PROFILE_NAME
+# create broker
+fabric:container-create-child --resolver localip --profile $BROKER_PROFILE_NAME root broker
+
+# create worker
 fabric:container-create-child --resolver localip root worker1

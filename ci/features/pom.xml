@@ -25,6 +25,18 @@
             </resource>
         </resources>
         <plugins>
+            <!-- explicitely disable creation of a not needed jar, since we are producing a zip via other plugins -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase/>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>

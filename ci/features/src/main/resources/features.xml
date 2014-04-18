@@ -4,21 +4,27 @@
     <repository>mvn:org.apache.activemq/activemq-karaf/${activemq.version}/xml/features</repository>
     <repository>mvn:org.apache.karaf.assemblies.features/enterprise/${karaf.version}/xml/features</repository>
     <repository>mvn:org.apache.karaf.assemblies.features/standard/${karaf.version}/xml/features</repository>
-    <repository>mvn:org.fusesource.fabric/fuse-fabric/${fuse-esb.version}/xml/features</repository>
+    <repository>mvn:io.fabric8/fabric8-karaf/${fabric8.version}/xml/features</repository>
     <repository>mvn:org.apache.cxf.karaf/apache-cxf/${cxf.version}/xml/features</repository>
-    <repository>mvn:io.hawt/hawtio-karaf/${hawtio.version}/xml/features</repository>
-
     <feature name="all" resolver="(obr)" version="${features.all.version}">
         <feature dependency="true" version="${features.module1.version}">module1</feature>
         <feature dependency="true" version="${features.module2.version}">module2</feature>
     </feature>
-
     <feature name="module1" resolver="(obr)" version="${features.module1.version}">
+        <feature dependency="true">camel-core</feature>
         <bundle>mvn:sample/module1/${module1.version}</bundle>
     </feature>
-
     <feature name="module2" resolver="(obr)" version="${features.module2.version}">
+        <feature dependency="true">camel-core</feature>
         <bundle>mvn:sample/module2/${module2.version}</bundle>
-   </feature>
-
+    </feature>
+    <feature name="common-dependencies" resolver="(obr)" version="${features.all.version}">
+        <feature dependency="true">camel-cxf</feature>
+        <feature dependency="true">camel-core</feature>
+        <feature dependency="true">camel-jackson</feature>
+        <feature dependency="true">camel-jaxb</feature>
+        <feature dependency="true">camel-blueprint</feature>
+        <feature dependency="true">activemq-camel</feature>
+        <feature dependency="true">mq-fabric</feature>
+    </feature>
 </features>

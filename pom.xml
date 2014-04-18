@@ -20,20 +20,12 @@
         <hawtio.version>1.3.1</hawtio.version>
         <karaf.version>2.3.0.redhat-610379</karaf.version>
         <activemq.version>5.9.0.redhat-610379</activemq.version>
-        <fuse-esb.version>7.2.0.redhat-024</fuse-esb.version>
+        <fabric8.version>1.0.0.redhat-379</fabric8.version>
         <cxf.version>2.7.0.redhat-610379</cxf.version>
         <jboss.fuse.version>6.1.0.redhat-379</jboss.fuse.version>
         <camel.version>2.12.0.redhat-610379</camel.version>
         <pax.web.version>3.0.6</pax.web.version>
-
-<!--         Fuse ESB 6.0
-        <hawtio.version>1.3.1</hawtio.version>
-        <karaf.version>2.3.0.redhat-60024</karaf.version>
-        <activemq.version>5.8.0.redhat-60024</activemq.version>
-        <fuse-esb.version>7.2.0.redhat-024</fuse-esb.version>
-        <cxf.version>2.6.0.redhat-60024</cxf.version>
-        <jboss.fuse.version>6.0.0.redhat-024</jboss.fuse.version>
-        <camel.version>2.10.0.redhat-60024</camel.version> -->
+        <jclouds.version>1.5.7</jclouds.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -56,6 +48,11 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>1.8</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>2.3.7</version>
                 </plugin>
             </plugins>
         </pluginManagement>

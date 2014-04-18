@@ -17,3 +17,9 @@ KARAF_PORT=8101
 ZOOKEEPER_PORT=2181
 MVN_PROXY_PORT=8181
 MAX_DISK_SPACE_USED=70
+
+BROKER_PROFILE_NAME=MyBroker
+
+
+# hook to allow overriding directly on the environment
+source file:/opt/rh/overridden_constants.properties
