@@ -6,6 +6,7 @@ A sample multimodule Maven Project that can be used as a quickstart to setup a d
 ### Description
 
 The project is divided in 2 main sections:  
+
 1. Modules
 2. CI
 
@@ -18,6 +19,7 @@ Attached to this project you find 2 dummy Camel based modules, there just to all
 CI is a collection of modules and plain scripts that automate the provisioning and release of you project.  
 
 It's divided in:
+
 1. config
 2. deploy_scripts
 3. features
