@@ -1,4 +1,4 @@
-source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/environment_constants
+source mvn:sample/karaf_scripts/${karaf_scripts.version}/karaf/environment_constants
 
 
 #### CREATION OF FABRIC NODE 2 AND 3 currently commented out due to BIT problems

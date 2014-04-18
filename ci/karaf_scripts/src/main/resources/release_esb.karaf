@@ -1,4 +1,4 @@
-source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/environment_constants
+source mvn:sample/karaf_scripts/${karaf_scripts.version}/karaf/environment_constants
 
 wait-for-service org.apache.karaf.features.FeaturesService
 
@@ -11,4 +11,5 @@ fabric:profile-edit --features module1 default 1.1
 ### Upgrade  ###
 ################
 
-fabric:container-upgrade --all 1.1
+fabric:container-upgrade 1.1 broker
+fabric:container-upgrade 1.1 worker1

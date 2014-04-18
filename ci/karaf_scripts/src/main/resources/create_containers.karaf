@@ -1,4 +1,4 @@
-source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/environment_constants
+source mvn:sample/karaf_scripts/${karaf_scripts.version}/karaf/environment_constants
 
 # create broker profile
 fabric:mq-create --profile $BROKER_PROFILE_NAME $BROKER_PROFILE_NAME
