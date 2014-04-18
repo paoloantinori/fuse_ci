@@ -29,6 +29,8 @@
         <pax.web.version>3.0.6</pax.web.version>
         <jclouds.version>1.5.7</jclouds.version>
 
+        <overridden.properties.path>/opt/rh/overridden_constants.properties</overridden.properties.path>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
