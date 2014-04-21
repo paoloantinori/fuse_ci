@@ -140,7 +140,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>com.truphone.esb.configuration</groupId>
+                                    <groupId>sample.configuration</groupId>
                                     <artifactId>esb-config</artifactId>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
