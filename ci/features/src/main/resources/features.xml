@@ -5,7 +5,7 @@
         <feature dependency="true" version="${features.module2.version}">module2</feature>
     </feature>
     <feature name="module1" resolver="(obr)" version="${features.module1.version}">
-        <feature dependency="true" version="${camel.version}">camel-core</feature>
+        <feature dependency="true" version="${features.all.version}">common-dependencies</feature>
         <bundle>mvn:sample/module1/${module1.version}</bundle>
     </feature>
     <feature name="module2" resolver="(obr)" version="${features.module2.version}">
@@ -15,10 +15,6 @@
     <feature name="common-dependencies" resolver="(obr)" version="${features.all.version}">
         <feature dependency="true">camel-cxf</feature>
         <feature dependency="true" version="${camel.version}">camel-core</feature>
-        <feature dependency="true" version="${camel.version}">camel-jackson</feature>
-        <feature dependency="true" version="${camel.version}">camel-jaxb</feature>
         <feature dependency="true" version="${camel.version}">camel-blueprint</feature>
-        <feature dependency="true">activemq-camel</feature>
-        <feature dependency="true">mq-fabric</feature>
     </feature>
 </features>
