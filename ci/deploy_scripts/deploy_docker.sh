@@ -58,6 +58,7 @@ docker run -d -t -i $EXPOSE_PORTS --name root fuse6.1
 # assign ip addresses to env variable, despite they should be constant on the same machine across sessions
 IP_ROOT=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' root)
 USERNAME_ROOT="fuse"
+KARAF_SCRIPTS_VERSION="1.0.0-SNAPSHOT"
 
 ########### aliases to preconfigure ssh and scp verbose to type options
 
@@ -87,7 +88,7 @@ ssh2host "/opt/rh/jboss-fuse-*/bin/start"
 ############################# here you are starting to interact with Fuse/Karaf
 
 # wait for critical components to be available before progressing with other steps
-ssh2fabric "wait-for-service -t 300000 io.fabric8.zookeeper.bootstrap.BootstrapConfiguration"
+ssh2fabric "wait-for-service -t 300000 io.fabric8.api.BootstrapComplete"
 
 
 # create a new fabric AND wait for the Fabric to be up and ready to accept the following commands
@@ -114,8 +115,8 @@ ssh2fabric "fabric:profile-edit --pid org.ops4j.pax.url.mvn/checksumPolicy=warn 
 
 
 
-ssh2fabric "shell:source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/create_containers"
-ssh2fabric "shell:source mvn:sample/karaf_scripts/1.0.0-SNAPSHOT/karaf/release_esb"
+ssh2fabric "shell:source mvn:sample/karaf_scripts/$KARAF_SCRIPTS_VERSION/karaf/create_containers"
+ssh2fabric "shell:source mvn:sample/karaf_scripts/$KARAF_SCRIPTS_VERSION/karaf/release_esb"
 
 
 
