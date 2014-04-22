@@ -26,4 +26,4 @@ BROKER_01_JVM=""
 
 
 # hook to allow overriding directly on the environment
-source file:/opt/rh/overridden_constants.properties
+source file:${overridden.properties.path}
