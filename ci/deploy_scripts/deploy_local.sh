@@ -88,7 +88,6 @@ ssh2fabric "fabric:create --clean -r localip -g localip --wait-for-provisioning"
 mkdir -p "$DEPLOYMENT_FOLDER/"
 # upload release
 cp -a ../offline_maven_repo/target/offline_maven_repo-*.zip "$DEPLOYMENT_FOLDER/"
-VERSION=$(ls -1 offline_maven_repo-* |  cut -d '-' -f 3- | sed 's/\.zip//' )
 # upload properties
 cp -a ../config/overridden_constants.properties "$DEPLOYMENT_FOLDER/"
 

@@ -99,7 +99,6 @@ ssh2fabric "fabric:create --clean -r localip -g localip --wait-for-provisioning"
 
 # upload release
 scp ../offline_maven_repo/target/offline_maven_repo-*.zip $USERNAME_ROOT@$IP_ROOT:/opt/rh/
-VERSION=$(ls -1 offline_maven_repo-* |  cut -d '-' -f 3- | sed 's/\.zip//' )
 # upload properties
 scp ../config/overridden_constants.properties $USERNAME_ROOT@$IP_ROOT:/opt/rh/
 
