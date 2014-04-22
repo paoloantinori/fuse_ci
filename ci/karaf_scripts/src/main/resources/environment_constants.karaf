@@ -20,6 +20,10 @@ MAX_DISK_SPACE_USED=70
 
 BROKER_PROFILE_NAME=MyBroker
 
+# sample value: "-Xms1024m -Xmx1024m"
+CONTAINER_01_JVM=""
+BROKER_01_JVM=""
+
 
 # hook to allow overriding directly on the environment
 source file:/opt/rh/overridden_constants.properties
