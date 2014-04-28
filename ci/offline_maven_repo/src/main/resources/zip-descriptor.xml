@@ -9,16 +9,8 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${project.basedir}/target/offline_maven_repo</directory>
+			<directory>${offline.maven.tmp}</directory>
 			<outputDirectory>/offline_maven_repo</outputDirectory>
 		</fileSet>
-		<fileSet>
-            <directory>${project.basedir}/target/esb-config/${target.environment}/tru</directory>
-            <outputDirectory>/tru</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/target/esb-config/tru-broker</directory>
-            <outputDirectory>/tru</outputDirectory>
-        </fileSet>
     </fileSets>
 </assembly>
