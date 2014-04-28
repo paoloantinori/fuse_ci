@@ -51,8 +51,8 @@
                                 <descriptor>mvn:org.jboss.fuse/jboss-fuse/${jboss.fuse.version}/xml/features</descriptor>
                                 <descriptor>mvn:io.fabric8/fabric8-karaf/${fabric8.version}/xml/features</descriptor>
                                 <descriptor>mvn:org.ops4j.pax.web/pax-web-features/${pax.web.version}/xml/features</descriptor>
-                                <descriptor>mvn:org.apache.karaf.assemblies.features/standard/${karaf.version}/xml/features</descriptor>
-                                <descriptor>mvn:org.apache.karaf.assemblies.features/enterprise/${karaf.version}/xml/features</descriptor>
+<!--                                 <descriptor>mvn:org.apache.karaf.assemblies.features/standard/${karaf.version}/xml/features</descriptor>
+                                <descriptor>mvn:org.apache.karaf.assemblies.features/enterprise/${karaf.version}/xml/features</descriptor> -->
                                 <descriptor>mvn:org.apache.activemq/activemq-karaf/${activemq.version}/xml/features-core</descriptor>
                                 <descriptor>mvn:org.apache.activemq/activemq-karaf/${activemq.version}/xml/features</descriptor>
                                 <descriptor>mvn:org.apache.cxf.karaf/apache-cxf/${cxf.version}/xml/features</descriptor>
@@ -66,6 +66,7 @@
                                 <feature>module2</feature>
                             </features>
                             <repository>target/offline_maven_repo</repository>
+                            <karafVersion>${karaf.version}</karafVersion>
                         </configuration>
                     </execution>
                 </executions>
