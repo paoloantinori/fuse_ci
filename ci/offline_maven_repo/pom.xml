@@ -123,7 +123,7 @@
                                     <artifactId>karaf_scripts</artifactId>
                                     <version>${karaf_scripts.version}</version>
                                     <type>karaf</type>
-                                    <classifier>release_esb</classifier>
+                                    <classifier>deploy_codebase</classifier>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>target/offline_maven_repo/sample/karaf_scripts/${karaf_scripts.version}</outputDirectory>
                                 </artifactItem>

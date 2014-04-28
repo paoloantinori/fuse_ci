@@ -80,9 +80,9 @@
                                     <classifier>provision_full_fabric</classifier>
                                 </artifact>
                                 <artifact>
-                                    <file>target/classes/release_esb.karaf</file>
+                                    <file>target/classes/deploy_codebase.karaf</file>
                                     <type>karaf</type>
-                                    <classifier>release_esb</classifier>
+                                    <classifier>deploy_codebase</classifier>
                                 </artifact>
                             </artifacts>
                         </configuration>

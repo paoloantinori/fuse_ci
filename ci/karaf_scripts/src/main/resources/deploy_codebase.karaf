@@ -1,0 +1,20 @@
+source mvn:sample/karaf_scripts/${karaf_scripts.version}/karaf/environment_constants
+
+wait-for-service org.apache.karaf.features.FeaturesService
+
+# encapsulate in a transaction because without it, profile-edit commands would be provisioned one after the other
+fabric:version-create --default ${profiles.default.version}
+
+# assign the current features.xml file to the profile
+fabric:profile-edit --repositories mvn:sample/features/${features.all.version}/xml/features MyProfile ${profiles.default.version}
+
+# assign specific features to a profile
+fabric:profile-edit --features module1 MyProfile ${profiles.default.version}
+
+################
+### Upgrade  ###
+################
+
+# apply new version of the already assigned profiles
+fabric:container-upgrade ${profiles.default.version} broker
+fabric:container-upgrade ${profiles.default.version} worker1
