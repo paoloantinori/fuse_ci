@@ -49,16 +49,16 @@
                                 <descriptor>mvn:sample/features/${features.all.version}/xml/features</descriptor>
                                 <!-- external dependencies features -->
                                 <descriptor>mvn:org.jboss.fuse/jboss-fuse/${jboss.fuse.version}/xml/features</descriptor>
-                                <descriptor>mvn:io.fabric8/fabric8-karaf/${fabric8.version}/xml/features</descriptor>
-                                <descriptor>mvn:org.ops4j.pax.web/pax-web-features/${pax.web.version}/xml/features</descriptor>
-<!--                                 <descriptor>mvn:org.apache.karaf.assemblies.features/standard/${karaf.version}/xml/features</descriptor>
-                                <descriptor>mvn:org.apache.karaf.assemblies.features/enterprise/${karaf.version}/xml/features</descriptor> -->
-                                <descriptor>mvn:org.apache.activemq/activemq-karaf/${activemq.version}/xml/features-core</descriptor>
-                                <descriptor>mvn:org.apache.activemq/activemq-karaf/${activemq.version}/xml/features</descriptor>
-                                <descriptor>mvn:org.apache.cxf.karaf/apache-cxf/${cxf.version}/xml/features</descriptor>
-                                <descriptor>mvn:org.apache.camel.karaf/apache-camel/${camel.version}/xml/features</descriptor>
-                                <repository>mvn:org.jclouds.karaf/jclouds-karaf/${jclouds.version}/xml/features</repository>
-                                <repository>mvn:org.apache.karaf.assemblies.features/spring/${spring.version}/xml/features</repository>                                                       
+                                <!--                                         <descriptor>mvn:io.fabric8/fabric8-karaf/${fabric8.version}/xml/features</descriptor>
+                                        <descriptor>mvn:org.ops4j.pax.web/pax-web-features/${pax.web.version}/xml/features</descriptor>
+                                        <descriptor>mvn:org.apache.karaf.assemblies.features/standard/${karaf.version}/xml/features</descriptor>
+                                        <descriptor>mvn:org.apache.karaf.assemblies.features/enterprise/${karaf.version}/xml/features</descriptor>
+                                        <descriptor>mvn:org.apache.activemq/activemq-karaf/${activemq.version}/xml/features-core</descriptor>
+                                        <descriptor>mvn:org.apache.activemq/activemq-karaf/${activemq.version}/xml/features</descriptor>
+                                        <descriptor>mvn:org.apache.cxf.karaf/apache-cxf/${cxf.version}/xml/features</descriptor>
+                                        <descriptor>mvn:org.apache.camel.karaf/apache-camel/${camel.version}/xml/features</descriptor>
+                                        <repository>mvn:org.jclouds.karaf/jclouds-karaf/${jclouds.version}/xml/features</repository>
+                                        <repository>mvn:org.apache.karaf.assemblies.features/spring/${spring.version}/xml/features</repository> -->
                             </descriptors>
                             <features>
                                 <!-- <feature>all</feature> -->
@@ -133,24 +133,24 @@
                         </configuration>
                     </execution>
                     <!--                     <execution>
-                        <id>add-configuration-files</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>sample.configuration</groupId>
-                                    <artifactId>esb-config</artifactId>
-                                    <type>zip</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>target/esb-config</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution> -->
+                                            <id>add-configuration-files</id>
+                                            <phase>generate-resources</phase>
+                                            <goals>
+                                                <goal>copy</goal>
+                                                <goal>unpack</goal>
+                                            </goals>
+                                            <configuration>
+                                                <artifactItems>
+                                                    <artifactItem>
+                                                        <groupId>sample.configuration</groupId>
+                                                        <artifactId>esb-config</artifactId>
+                                                        <type>zip</type>
+                                                        <overWrite>true</overWrite>
+                                                        <outputDirectory>target/esb-config</outputDirectory>
+                                                    </artifactItem>
+                                                </artifactItems>
+                                            </configuration>
+                                        </execution> -->
                 </executions>
                 <!--<configuration>-->
                 <!--<skip>true</skip>-->
