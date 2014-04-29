@@ -105,6 +105,16 @@
     </dependencyManagement>
     <repositories>
         <repository>
+            <id>maven_central</id>
+            <url>http://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
             <id>fusesource</id>
             <url>http://repo.fusesource.com/maven2</url>
             <snapshots>
