@@ -42,12 +42,14 @@ ulimit -n 4096
 
 
 # remove old docker containers with the same names
-docker stop -t 0 root  
+docker stop -t 0 dev  
+docker stop -t 0 prod  
 docker stop -t 0 nexus  
 docker stop -t 0 jenkins
 docker stop -t 0 git
 
-docker rm root 
+docker rm dev 
+docker rm prod 
 docker rm nexus 
 docker rm jenkins
 docker rm git
@@ -61,14 +63,16 @@ if [[ x$EXPOSE_PORTS == xtrue ]] ; then EXPOSE_PORTS=-P ; fi
 set -e
 
 # create your lab
-docker run -d -t -i $EXPOSE_PORTS   --name root 	fuse6.1
-docker run -d -t -i                 --name nexus 	blackhm/nexus
-docker run -d -t -i                 --name jenkins 	pantinor/jenkins
-docker run -d -t -i                 --name git      pantinor/jenkins sh -c 'service sshd start ; bash'
+docker run -d -t -i $EXPOSE_PORTS   --name dev      fuse6.1
+docker run -d -t -i $EXPOSE_PORTS   --name prod     fuse6.1
+docker run -d -t -i $EXPOSE_PORTS   --name nexus    pantinor/centos-nexus
+docker run -d -t -i $EXPOSE_PORTS   --name jenkins  pantinor/centos-jenkins
+docker run -d -t -i $EXPOSE_PORTS   --name git      pantinor/centos-jenkins sh -c 'service sshd start ; bash'
 
 
 # assign ip addresses to env variable, despite they should be constant on the same machine across sessions
-IP_ROOT=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' root)
+IP_DEV=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' dev)
+IP_PROD=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' prod)
 IP_NEXUS=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' nexus)
 IP_JENKINS=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' jenkins)
 IP_GIT=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' git)
@@ -83,10 +87,10 @@ SSH_PATH=$(which ssh)
 ### ssh aliases to remove some of the visual clutter in the rest of the script
 # alias to connect to your docker images
 alias ssh="$SSH_PATH -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR"
-alias ssh2host="$SSH_PATH -o UserKnownHostsFile=/dev/null -o ConnectionAttempts=180 -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR $USERNAME_ROOT@$IP_ROOT"
+alias ssh2host="$SSH_PATH -o UserKnownHostsFile=/dev/null -o ConnectionAttempts=180 -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR $USERNAME_ROOT@$IP_DEV"
 alias ssh2git="$SSH_PATH -o UserKnownHostsFile=/dev/null -o ConnectionAttempts=180 -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR $USERNAME_ROOT@$IP_GIT"
 # alias to connect to the ssh server exposed by JBoss Fuse. uses sshpass to script the password authentication
-alias ssh2fabric="sshpass -p admin $SSH_PATH -p 8101 -o ServerAliveCountMax=100 -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR admin@$IP_ROOT"
+alias ssh2fabric="sshpass -p admin $SSH_PATH -p 8101 -o ServerAliveCountMax=100 -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR admin@$IP_DEV"
 #alias for scp to inline flags to disable ssh warnings
 alias scp="scp -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o LogLevel=ERROR"
 
@@ -129,9 +133,17 @@ while ! curl --silent -L $IP_JENKINS:8080/  > /dev/null; do sleep 5s; done;
 # download jenkins command line client
 wget $IP_JENKINS:8080/jnlpJars/jenkins-cli.jar -O /tmp/jenkins-cli.jar
 
-echo $PWD
+# replace git server ip address
+
+
 # import a job
-java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ create-job test < ci/deploy_scripts/config.xml
+sed "s/__IP_GIT__/$IP_GIT/" ci/deploy_scripts/config.xml  | java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ create-job test
+
+#trigger a job
+java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ build test
+
+
+# trigger build job
 
 set +x
 echo "
@@ -139,10 +151,10 @@ echo "
 CI Quickstart
 ----------------------------------------------------
 FABRIC ROOT: 
-- ip:          $IP_ROOT
-- ssh:         ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null fuse@$IP_ROOT
-- karaf:       sshpass -p admin ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null admin@$IP_ROOT -p8101
-- tail logs:   ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null fuse@$IP_ROOT 'tail -F /opt/rh/jboss-fuse-*/data/log/fuse.log'
+- ip:          $IP_DEV
+- ssh:         ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null fuse@$IP_DEV
+- karaf:       sshpass -p admin ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null admin@$IP_DEV -p8101
+- tail logs:   ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null fuse@$IP_DEV 'tail -F /opt/rh/jboss-fuse-*/data/log/fuse.log'
 
 NEXUS: 
 - ip:          $IP_NEXUS

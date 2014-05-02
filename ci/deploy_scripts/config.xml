@@ -8,7 +8,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>ssh://fuse@172.17.0.5/home/fuse/fuse_scripts.git</url>
+        <url>ssh://fuse@__IP_GIT__/home/fuse/fuse_scripts.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
