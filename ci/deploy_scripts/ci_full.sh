@@ -111,64 +111,27 @@ git remote add upstream ssh://fuse@$IP_GIT/home/fuse/fuse_scripts.git
 echo "Host *" >> ~/.ssh/config
 echo "UserKnownHostsFile /dev/null" >> ~/.ssh/config
 echo "StrictHostKeyChecking no" >> ~/.ssh/config
+
 # push source code
-git push upstream
+git push upstream master
 
 # remove temporary ssh permissions
 sed -ie '$d' ~/.ssh/config
 sed -ie '$d' ~/.ssh/config
 sed -ie '$d' ~/.ssh/config
-
-### build and deploy to Nexus
-#(cd ../../ ; mvn clean deploy -DskipTests -Dmaven.test.skip -s my_settings.xml -Dip.nexus=$IP_NEXUS) 
+sed -ie '$d' ~/.ssh/config
 
 
 
 # wait for jenkins server to be up, avoids "Connection reset by peer" errors
 while ! curl --silent -L $IP_JENKINS:8080/  > /dev/null; do sleep 5s; done;
 
+# download jenkins command line client
+wget $IP_JENKINS:8080/jnlpJars/jenkins-cli.jar -O /tmp/jenkins-cli.jar
 
-
-# OFFLINE_MAVEN_REPO_PATH="/opt/rh/offline_maven_repo"
-
-
-# # start fuse on root node (yes, that initial backslash is required to not use the declared alias)
-# ssh2host "/opt/rh/jboss-fuse-*/bin/start"
-
-
-# ############################# here you are starting to interact with Fuse/Karaf
-
-# # wait for critical components to be available before progressing with other steps
-# ssh2fabric "wait-for-service -t 300000 io.fabric8.api.BootstrapComplete"
-
-
-# # create a new fabric AND wait for the Fabric to be up and ready to accept the following commands
-# ssh2fabric "fabric:create --clean -r localip -g localip --wait-for-provisioning" 
-
-# # stop default broker created automatically with fabric
-# #ssh2fabric "stop org.jboss.amq.mq-fabric" 
-
-# # upload release
-# scp ../offline_maven_repo/target/offline_maven_repo-*.zip $USERNAME_ROOT@$IP_ROOT:/opt/rh/
-# # upload properties
-# scp ../config/overridden_constants.properties $USERNAME_ROOT@$IP_ROOT:/opt/rh/
-
-
-# # extract the release
-# ssh2host "unzip -u -o /opt/rh/*.zip -d /opt/rh"
-
-# # configure local maven
-# ssh2fabric "fabric:profile-edit --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"file://$OFFLINE_MAVEN_REPO_PATH@snapshots@id=sample\" default"
-# # important! to disable maven snapshot checksum that otherwise will block the functionality
-# ssh2fabric "fabric:profile-edit --pid org.fusesource.fabric.maven/checksumPolicy=warn  default "
-# ssh2fabric "fabric:profile-edit --pid org.ops4j.pax.url.mvn/checksumPolicy=warn  default "
-
-
-
-# ssh2fabric "shell:source mvn:sample/karaf_scripts/$KARAF_SCRIPTS_VERSION/karaf/create_containers"
-# ssh2fabric "shell:source mvn:sample/karaf_scripts/$KARAF_SCRIPTS_VERSION/karaf/deploy_codebase"
-
-
+echo $PWD
+# import a job
+java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ create-job test < ci/deploy_scripts/config.xml
 
 set +x
 echo "
@@ -190,6 +153,7 @@ NEXUS:
 JENKINS: 
 - ip:          $IP_JENKINS
 - http:        http://$IP_JENKINS:8080/
+- ssh:         ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o UserKnownHostsFile=/dev/null fuse@$IP_JENKINS
 
 GIT (SSH)
 - ip:          $IP_GIT
