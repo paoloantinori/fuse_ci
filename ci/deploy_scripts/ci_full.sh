@@ -133,14 +133,11 @@ while ! curl --silent -L $IP_JENKINS:8080/  > /dev/null; do sleep 5s; done;
 # download jenkins command line client
 wget $IP_JENKINS:8080/jnlpJars/jenkins-cli.jar -O /tmp/jenkins-cli.jar
 
-# replace git server ip address
+# replace git server ip address and import a job
+sed "s/__IP_GIT__/$IP_GIT/" ci/deploy_scripts/config.xml  | java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ create-job sample
 
-
-# import a job
-sed "s/__IP_GIT__/$IP_GIT/" ci/deploy_scripts/config.xml  | java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ create-job test
-
-#trigger a job
-java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ build test
+# trigger a job
+java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ build sample
 
 
 # trigger build job
