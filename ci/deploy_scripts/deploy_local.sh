@@ -63,7 +63,7 @@ OFFLINE_MAVEN_REPO_PATH="$DEPLOYMENT_FOLDER/offline_maven_repo"
 
 
 #invoke clean script
-sh clean_local.sh
+sh _clean_local.sh
 
 # start fuse on root node (yes, that initial backslash is required to not use the declared alias)
 "$FUSE_PATH/bin/start"

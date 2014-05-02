@@ -30,6 +30,7 @@
     <groupId>sample</groupId>
     <artifactId>root</artifactId>
   </rootModule>
+  <goals>clean deploy -DskipTests -Dip.nexus=__IP_NEXUS __</goals>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
   <ignoreUpstremChanges>false</ignoreUpstremChanges>
@@ -39,7 +40,9 @@
   <mavenValidationLevel>-1</mavenValidationLevel>
   <runHeadless>false</runHeadless>
   <disableTriggerDownstreamProjects>false</disableTriggerDownstreamProjects>
-  <settings class="jenkins.mvn.DefaultSettingsProvider"/>
+  <settings class="jenkins.mvn.FilePathSettingsProvider">
+    <path>my_settings.xml</path>
+  </settings>
   <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
   <reporters/>
   <publishers/>

@@ -43,13 +43,11 @@ ulimit -n 4096
 
 # remove old docker containers with the same names
 docker stop -t 0 dev  
-docker stop -t 0 prod  
 docker stop -t 0 nexus  
 docker stop -t 0 jenkins
 docker stop -t 0 git
 
 docker rm dev 
-docker rm prod 
 docker rm nexus 
 docker rm jenkins
 docker rm git
@@ -64,7 +62,6 @@ set -e
 
 # create your lab
 docker run -d -t -i $EXPOSE_PORTS   --name dev      fuse6.1
-docker run -d -t -i $EXPOSE_PORTS   --name prod     fuse6.1
 docker run -d -t -i $EXPOSE_PORTS   --name nexus    pantinor/centos-nexus
 docker run -d -t -i $EXPOSE_PORTS   --name jenkins  pantinor/centos-jenkins
 docker run -d -t -i $EXPOSE_PORTS   --name git      pantinor/centos-jenkins sh -c 'service sshd start ; bash'
@@ -72,7 +69,6 @@ docker run -d -t -i $EXPOSE_PORTS   --name git      pantinor/centos-jenkins sh -
 
 # assign ip addresses to env variable, despite they should be constant on the same machine across sessions
 IP_DEV=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' dev)
-IP_PROD=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' prod)
 IP_NEXUS=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' nexus)
 IP_JENKINS=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' jenkins)
 IP_GIT=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' git)
@@ -98,6 +94,33 @@ alias scp="scp -o ConnectionAttempts=180 -o UserKnownHostsFile=/dev/null -o Stri
 ################################################################################################
 #####                             Tutorial starts here                                     #####
 ################################################################################################
+
+#invoke clean script
+sh _clean_local.sh
+
+# start fuse on root node (yes, that initial backslash is required to not use the declared alias)
+ssh2host "/opt/rh/jboss-fuse-*/bin/start"
+
+############################# here you are starting to interact with Fuse/Karaf
+
+# wait for critical components to be available before progressing with other steps
+ssh2fabric "wait-for-service -t 300000 io.fabric8.api.BootstrapComplete"
+
+# create a new fabric AND wait for the Fabric to be up and ready to accept the following commands
+ssh2fabric "fabric:create --clean -r localip -g localip --wait-for-provisioning" 
+
+
+# configure local maven
+ssh2fabric "fabric:profile-edit --pid io.fabric8.agent/org.ops4j.pax.url.mvn.repositories=\"http://$IP_NEXUS:8081/nexus@snapshots@id=sample\" default"
+# important! to disable maven snapshot checksum that otherwise will block the functionality
+ssh2fabric "fabric:profile-edit --pid org.fusesource.fabric.maven/checksumPolicy=warn  default "
+ssh2fabric "fabric:profile-edit --pid org.ops4j.pax.url.mvn/checksumPolicy=warn  default "
+
+
+
+
+
+#### interaction with git and nexus
 
 # wait for nexus server to be up, avoids "Connection reset by peer" errors
 while ! curl --silent -L $IP_NEXUS:8081/nexus > /dev/null; do sleep 5s; done;
@@ -134,10 +157,15 @@ while ! curl --silent -L $IP_JENKINS:8080/  > /dev/null; do sleep 5s; done;
 wget $IP_JENKINS:8080/jnlpJars/jenkins-cli.jar -O /tmp/jenkins-cli.jar
 
 # replace git server ip address and import a job
-sed "s/__IP_GIT__/$IP_GIT/" ci/deploy_scripts/config.xml  | java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ create-job sample
+sed "s/__IP_GIT__/$IP_GIT/" ci/deploy_scripts/config.xml  | sed "s/__IP_NEXUS__/$IP_NEXUS/"  | java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ create-job sample
 
 # trigger a job
 java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ build sample
+
+
+ssh2fabric "shell:source mvn:sample/karaf_scripts/$KARAF_SCRIPTS_VERSION/karaf/create_containers"
+ssh2fabric "shell:source mvn:sample/karaf_scripts/$KARAF_SCRIPTS_VERSION/karaf/deploy_codebase"
+
 
 
 # trigger build job
