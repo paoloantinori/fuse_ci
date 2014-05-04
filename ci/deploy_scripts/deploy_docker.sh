@@ -2,6 +2,9 @@
 
 ##########################################################################################################
 # Description:
+# Script Docker based, that shows how to deploy this sample project.
+# It requires a Docker image called fuse6.1 that your are expected to build yourself following instructions here:
+# https://github.com/paoloantinori/dockerfiles/tree/master/centos/fuse
 #
 # Dependencies:
 # - docker 

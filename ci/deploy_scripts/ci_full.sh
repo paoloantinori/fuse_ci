@@ -3,23 +3,9 @@
 ##########################################################################################################
 # Description:
 #
-# Dependencies:
-# - docker 
-# - sshpass, used to avoid typing the pass everytime (not needed if you are invoking the commands manually)
-# to install on Fedora/Centos/Rhel: 
-# sudo yum install -y docker-io sshpass
-#
-# to install on MacOSX:
-# sudo port install sshpass
-# or
-# brew install https://raw.github.com/eugeneoden/homebrew/eca9de1/Library/Formula/sshpass.rb
-#
-# Prerequesites:
-# - run docker in case it's not already
-# sudo service docker start
-#
-# Notes:
-# - if you don't want to use docker, just assign to the ip addresses of your own boxes to environment variable
+# WIP: 
+# Sample script that shows the interaction of a Fuse instance, a Nexus repository, a Jenkins instance and a remote server that acts as
+# a git remote repository.
 #######################################################################################################
 
 
@@ -134,7 +120,7 @@ while ! curl --silent -L $IP_JENKINS:8080/  > /dev/null; do sleep 5s; done;
 wget $IP_JENKINS:8080/jnlpJars/jenkins-cli.jar -O /tmp/jenkins-cli.jar
 
 # replace git server ip address and import a job
-sed "s/__IP_GIT__/$IP_GIT/" ci/deploy_scripts/config.xml  | java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ create-job sample
+sed "s/__IP_GIT__/$IP_GIT/" ci/deploy_scripts/resources/config.xml  | java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ create-job sample
 
 # trigger a job
 java -jar /tmp/jenkins-cli.jar -s http://$IP_JENKINS:8080/ build sample

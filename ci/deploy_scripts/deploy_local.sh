@@ -2,6 +2,8 @@
 
 ##########################################################################################################
 # Description:
+# Script that shows how to deploy this sample project.
+# You need to adapt the variable FUSE_PATH to your Fuse installation path.
 #
 # Dependencies:
 # - sshpass, used to avoid typing the pass everytime (not needed if you are invoking the commands manually)

@@ -30,7 +30,7 @@
     <groupId>sample</groupId>
     <artifactId>root</artifactId>
   </rootModule>
-  <goals>clean deploy -DskipTests -Dip.nexus=__IP_NEXUS __</goals>
+  <goals>clean deploy -DskipTests -Dip.nexus=__IP_NEXUS__</goals>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
   <ignoreUpstremChanges>false</ignoreUpstremChanges>
