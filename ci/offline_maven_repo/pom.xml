@@ -20,6 +20,13 @@
             </resource>
         </resources>
         <plugins>
+            <!-- Usage of this plugin is optional. I'm using it because features-maven-plugin has(had?) a bug
+                 that prevented it to include maven artifacts that had an explicit "type" node set.
+                 So to have them included in the offline repo correctly, we are "manually" copying them to the 
+                 target folder that will turn in our output .zip with the help of the maven-dependecy-plugin.
+                 If you don't have any .karaf script you want to include, you can completely skip this plugin 
+                 invocation.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin </artifactId>
@@ -179,6 +186,13 @@
                 </plugins>
             </build>
         </profile>
+        <!--
+        Note that this profile is disabled by default:
+        This is an alternative way to produce the artifact to include in the offline-maven-repo.
+        It uses instead of maven-dependency-plugin instead of features-maven-plugin.
+        This profile uses the approach suggested on Fabric8 docs:
+        http://fabric8.io/gitbook/offlineRepo.html#creating-an-offline-repository-for-a-maven-project
+        -->
         <profile>
             <id>dependency-plugin</id>
             <activation>
